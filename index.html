@@ -14,6 +14,7 @@
             margin: 0;
             background-color: #f7f7f7;
             font-family: Arial, sans-serif;
+            transform: scale(0.6); /* 整体缩小到0.6倍 */
         }
 
         #mode-select {
@@ -43,22 +44,21 @@
         }
 
         #game-board {
-        position: relative;
-        width: 690px; /* 调整宽度为与卡槽相同 */
-        height: 690px; /* 调整高度为与卡槽相同 */
-        border: 2px solid #ccc;
-        border-radius: 10px;
-        background-color: #ffffff;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-        margin-bottom: 20px;
-        overflow: hidden;
-    }
-
+            position: relative;
+            width: 414px; /* 调整宽度为0.6倍 */
+            height: 414px; /* 调整高度为0.6倍 */
+            border: 2px solid #ccc;
+            border-radius: 10px;
+            background-color: #ffffff;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            margin-bottom: 20px;
+            overflow: hidden;
+        }
 
         .card {
             position: absolute;
-            width: 80px;
-            height: 120px;
+            width: 48px; /* 调整宽度为0.6倍 */
+            height: 72px; /* 调整高度为0.6倍 */
             border-radius: 10px;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
             cursor: pointer;
@@ -83,14 +83,14 @@
             border-radius: 10px;
             background-color: #ffffff;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-            width: 690px; /* 固定卡槽的宽度，适应8个卡片 */
-            height: 140px; /* 固定卡槽的高度 */
-            overflow: hidden; /* 隐藏溢出的内容 */
+            width: 414px; /* 固定卡槽的宽度为0.6倍 */
+            height: 84px; /* 固定卡槽的高度为0.6倍 */
+            overflow: hidden;
         }
 
         .pool-card {
-            width: 80px;
-            height: 120px;
+            width: 48px; /* 调整宽度为0.6倍 */
+            height: 72px; /* 调整高度为0.6倍 */
             border-radius: 10px;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
             transform: scale(0);
@@ -169,10 +169,6 @@
     });
 
     function initGame() {
-
-
-
-        // 重置卡槽
         const cardPoolDiv = document.getElementById('card-pool');
         cardPoolDiv.innerHTML = '';
 
@@ -183,7 +179,6 @@
         const { cardCount, moveSpeed } = modeSettings[selectedMode];
         const cardsToUse = [];
 
-        // 确保每种卡片数量为3的倍数
         cards.forEach(card => {
             for (let i = 0; i < cardCount / cards.length; i++) {
                 cardsToUse.push(card);
@@ -196,8 +191,8 @@
             const cardElement = document.createElement('div');
             cardElement.classList.add('card');
             cardElement.innerHTML = `<img src="${cardImages[cardType]}" alt="${cardType}">`;
-            cardElement.style.left = Math.random() * (gameBoard.clientWidth - 80) + 'px';
-            cardElement.style.top = Math.random() * (gameBoard.clientHeight - 120) + 'px';
+            cardElement.style.left = Math.random() * (gameBoard.clientWidth - 48) + 'px';
+            cardElement.style.top = Math.random() * (gameBoard.clientHeight - 72) + 'px';
             cardElement.addEventListener('click', () => selectCard(cardElement, cardType));
             gameBoard.appendChild(cardElement);
             randomMove(cardElement, moveSpeed);
@@ -206,8 +201,8 @@
 
     function randomMove(card, moveSpeed) {
         function move() {
-            card.style.left = Math.random() * (document.getElementById('game-board').clientWidth - 80) + 'px';
-            card.style.top = Math.random() * (document.getElementById('game-board').clientHeight - 120) + 'px';
+            card.style.left = Math.random() * (document.getElementById('game-board').clientWidth - 48) + 'px';
+            card.style.top = Math.random() * (document.getElementById('game-board').clientHeight - 72) + 'px';
         }
         move();
         setInterval(move, Math.random() * (moveSpeed[1] - moveSpeed[0]) + moveSpeed[0]);
@@ -225,7 +220,6 @@
         poolCard.innerHTML = `<img src="${cardImages[cardType]}" alt="${cardType}">`;
         cardPoolDiv.appendChild(poolCard);
 
-        // 延迟添加进入动画
         setTimeout(() => {
             poolCard.classList.add('entered');
         }, 10);
@@ -244,7 +238,6 @@
             poolCard.classList.add('pool-card');
             poolCard.innerHTML = `<img src="${cardImages[card]}" alt="${card}">`;
             cardPoolDiv.appendChild(poolCard);
-            // 延迟添加进入动画
             setTimeout(() => {
                 poolCard.classList.add('entered');
             }, 10);
@@ -270,12 +263,12 @@
         if (cardPool.length >= maxPoolSize) {
             setTimeout(() => {
                 alert('游戏失败，小杨又菜又爱玩！');
-                initGame(); // 游戏失败后自动重置
+                initGame();
             }, 300);
         } else if (document.getElementById('game-board').children.length === 0) {
             setTimeout(() => {
                 alert('恭喜小杨，成功消除所有卡片！');
-                initGame(); // 游戏胜利后自动重置
+                initGame();
             }, 300);
         }
     }
